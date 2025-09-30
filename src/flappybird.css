@@ -1,0 +1,21 @@
+body {
+  background-color: beige;
+}
+
+.item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+canvas {
+  width: 288px;
+  height: auto;
+  max-width: 100%;
+  background-color: #71c0ca;
+  background-image: url("flappybirdbg.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
