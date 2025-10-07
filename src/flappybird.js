@@ -14,7 +14,7 @@ let birdImg;
 //pipes
 let pipeWidth = 64; //width/height ratio = 384/3072 = 1/8
 let pipeHeight = 512;
-let pipeX = boardWidth;
+let pipeX = boardWidth / 1.5;
 let pipeY = 0;
 
 let topPipeImg;
@@ -32,22 +32,22 @@ window.onload = function () {
   birdImg.onload = function () {
     //draw flappy bird
     context.fillStyle = "#71c0ca";
-    context.fillRect(50, 300, 40, 30);
+    context.fillRect(birdX, birdY, 40, 30);
     //context.drawImage(Variable that holds the image, Image X Position, Image Y Position, Image Width, Image Height);
-    context.drawImage(birdImg, 50, 300, 40, 30);
+    context.drawImage(birdImg, birdX, birdY, 40, 30);
   };
 
   topPipeImg = new Image();
   topPipeImg.src = "./toppipe.png";
   topPipeImg.onload = function () {
     //draw top pipe
-    context.drawImage(topPipeImg, 250, 0, 50, 250);
+    context.drawImage(topPipeImg, pipeX, pipeY, 50, 250);
   };
 
   bottomPipeImg = new Image();
   bottomPipeImg.src = "./bottompipe.png";
   bottomPipeImg.onload = function () {
     //draw bottom pipe
-    context.drawImage(bottomPipeImg, 150, 379, 50, 200);
+    context.drawImage(bottomPipeImg, pipeX - 90, pipeY + 379, 50, 200);
   };
 };
