@@ -31,23 +31,27 @@ window.onload = function () {
   birdImg.src = "./flappybird.png";
   birdImg.onload = function () {
     //draw flappy bird
-    context.fillStyle = "#71c0ca";
-    context.fillRect(birdX, birdY, 40, 30);
     //context.drawImage(Variable that holds the image, Image X Position, Image Y Position, Image Width, Image Height);
-    context.drawImage(birdImg, birdX, birdY, 40, 30);
+    context.drawImage(birdImg, birdX, birdY, birdWidth, birdHeight);
   };
 
   topPipeImg = new Image();
   topPipeImg.src = "./toppipe.png";
   topPipeImg.onload = function () {
     //draw top pipe
-    context.drawImage(topPipeImg, pipeX, pipeY, 50, 250);
+    context.drawImage(topPipeImg, pipeX, pipeY, pipeWidth, pipeHeight / 2);
   };
 
   bottomPipeImg = new Image();
   bottomPipeImg.src = "./bottompipe.png";
   bottomPipeImg.onload = function () {
     //draw bottom pipe
-    context.drawImage(bottomPipeImg, pipeX - 90, pipeY + 379, 50, 200);
+    context.drawImage(
+      bottomPipeImg,
+      pipeX - 90,
+      pipeY + 375,
+      pipeWidth,
+      pipeHeight / 2.5
+    );
   };
 };
