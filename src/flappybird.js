@@ -68,6 +68,8 @@ function handleKeyDown(event) {
   }
 }
 
+document.addEventListener("keydown", handleKeyDown);
+
 // Main game loop
 function update() {
   console.log("Game updating...");
@@ -79,7 +81,7 @@ function update() {
   birdY = birdY + 1; // Gravity effect: bird falls down each frame
 
   // Draws the bird at its new position
-  document.addEventListener("keydown", handleKeyDown);
+
   drawBird();
   requestAnimationFrame(update);
 }
