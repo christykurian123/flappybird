@@ -54,4 +54,34 @@ window.onload = function () {
       pipeHeight / 2.5
     );
   };
+  requestAnimationFrame(update);
 };
+
+function drawBird() {
+  context.drawImage(birdImg, birdX, birdY, birdWidth, birdHeight);
+}
+
+function handleKeyDown(event) {
+  if (event.code === "Space") {
+    console.log("inside handleKeyDown If loop");
+    birdY = birdY - 50;
+  }
+}
+
+document.addEventListener("keydown", handleKeyDown);
+
+// Main game loop
+function update() {
+  console.log("Game updating...");
+
+  // Clears the entire canvas
+  context.clearRect(0, 0, board.width, board.height);
+
+  // Updates the bird's position
+  birdY = birdY + 1; // Gravity effect: bird falls down each frame
+
+  // Draws the bird at its new position
+
+  drawBird();
+  requestAnimationFrame(update);
+}
