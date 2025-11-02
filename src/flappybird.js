@@ -20,12 +20,21 @@ let pipeY = 0;
 let topPipeImg;
 let bottomPipeImg;
 
+let velocityX = -2; //pipes moving left speed
+let velocityY = 0; //bird jump speed
+let gravity = 0.4;
+
+board = document.getElementById("board");
+context = board.getContext("2d");
+
+const RUNNING = "RUNNING";
+const GAME_OVER = "GAME_OVER";
+
+let gameState = RUNNING;
+
 window.onload = function () {
-  board = document.getElementById("board");
   board.height = boardHeight;
   board.width = boardWidth;
-  context = board.getContext("2d"); //used for drawing on the board
-
   //load images
   birdImg = new Image();
   birdImg.src = "./flappybird.png";
@@ -34,18 +43,15 @@ window.onload = function () {
     //context.drawImage(Variable that holds the image, Image X Position, Image Y Position, Image Width, Image Height);
     context.drawImage(birdImg, birdX, birdY, birdWidth, birdHeight);
   };
-
   topPipeImg = new Image();
   topPipeImg.src = "./toppipe.png";
   topPipeImg.onload = function () {
-    //draw top pipe
     context.drawImage(topPipeImg, pipeX, pipeY, pipeWidth, pipeHeight / 2);
   };
 
   bottomPipeImg = new Image();
   bottomPipeImg.src = "./bottompipe.png";
   bottomPipeImg.onload = function () {
-    //draw bottom pipe
     context.drawImage(
       bottomPipeImg,
       pipeX - 90,
@@ -55,33 +61,98 @@ window.onload = function () {
     );
   };
   requestAnimationFrame(update);
+  document.addEventListener("keydown", moveBird);
 };
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "r" || e.key === "R") {
+    if (gameState === GAME_OVER) {
+      restartGame();
+    }
+  }
+});
+
+board.addEventListener("click", () => {
+  if (gameState === GAME_OVER) {
+    restartGame();
+  } else if (gameState === RUNNING) {
+    velocityY = -6;
+  }
+});
+
+// Main game loop
+function update() {
+  console.log("Game updating...");
+  context.clearRect(0, 0, board.width, board.height); // Clears the entire canvas
+  // Updates the bird's position
+  velocityY += gravity; //0 -> 0.4 -> 0.8 -> 1.2 ...
+  birdY += velocityY;
+  pipeX += velocityX; //move pipe to left
+
+  birdY = Math.max(0, Math.min(birdY, boardHeight - birdHeight));
+  drawBird();
+  drawTopPipe();
+  drawBottomPipe();
+  if (
+    gameState === RUNNING &&
+    (birdY === 0 || birdY === boardHeight - birdHeight)
+  ) {
+    gameState = GAME_OVER;
+  } else if (gameState === GAME_OVER) {
+    console.log("gameState: " + gameState);
+    drawGameOver();
+  }
+  requestAnimationFrame(update);
+}
 
 function drawBird() {
   context.drawImage(birdImg, birdX, birdY, birdWidth, birdHeight);
 }
 
-function handleKeyDown(event) {
-  if (event.code === "Space") {
-    console.log("inside handleKeyDown If loop");
-    birdY = birdY - 50;
+function drawTopPipe() {
+  context.drawImage(topPipeImg, pipeX, pipeY, pipeWidth, pipeHeight / 2);
+}
+
+function drawBottomPipe() {
+  context.drawImage(
+    bottomPipeImg,
+    pipeX,
+    pipeY + 375,
+    pipeWidth,
+    pipeHeight / 2.5
+  );
+}
+
+function moveBird(e) {
+  if (
+    gameState === RUNNING &&
+    (e.code == "Space" || e.code == "ArrowUp" || e.code == "KeyX")
+  ) {
+    console.log("inside moveBird If loop");
+    velocityY = -6; //jump
   }
 }
 
-document.addEventListener("keydown", handleKeyDown);
-
-// Main game loop
-function update() {
-  console.log("Game updating...");
-
-  // Clears the entire canvas
+function drawGameOver() {
   context.clearRect(0, 0, board.width, board.height);
-
-  // Updates the bird's position
-  birdY = birdY + 1; // Gravity effect: bird falls down each frame
-
-  // Draws the bird at its new position
-
   drawBird();
-  requestAnimationFrame(update);
+  context.fillStyle = "White";
+  context.font = "40px Arial";
+  context.textAlign = "center";
+  context.fillText("GAME OVER", boardWidth / 2, board.height / 2);
+
+  context.font = "17px Arial";
+  context.fillText(
+    "Press R or Click to Restart",
+    boardWidth / 2,
+    board.height / 2 + 40
+  );
+}
+
+function restartGame() {
+  console.log("Inside restartGame");
+  birdY = 150;
+  velocityY = 0;
+  pipeX = boardWidth;
+  gameState = RUNNING;
 }
